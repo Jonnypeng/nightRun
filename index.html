@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/reset.min.css"/>
+    <link rel="stylesheet" href="css/common.css"/>
+    <title>战斗吧梦梦</title>
+</head>
+<body  onload="init();"  style="margin: 0px;background-color: #000000;overflow-x:hidden;overflow-y:hidden">
+    <!--<div style="height: 64px"></div>-->
+    <img id="img" style="position:absolute;">
+    <img id="loadPic" src="images/jzyBG2.jpg" style="position:absolute;"/>
+    <canvas id="mainView" width="750" height="1206"  style="position:absolute;"></canvas>
+    <div id="maskMain">
+        <div class="rankmain">
+            <span class="weekBest"></span>
+            <div class="rankBox">
+                <div class="rankBox-hd"><ul><li class="on"><span class="ranktitle"></span><em class="arrow-down"></em></li></ul></div>
+                <p class="freshen">排行榜5分钟刷新一次，每周一0:00重置</p>
+                <div class="rankBox-bd"><ul class="ranklist"></ul></div>
+                <div class="myrank"><p class="myrankcon"><span>本周最佳排名:</span><em>加载中...</em></p></div>
+            </div>
+        </div>
+        <div class="btnRankBox">
+            <a class="backRankBtn" href="javascript:void(0);"></a>
+            <a class="replayRankBtn" href="javascript:void(0);"></a>
+            <a class="shareRankBtn" href="javascript:void(0);"></a>
+        </div>
+    </div>
+    <div class="sharemask"></div>
+    <script src="js/createjs-min.js"></script>
+    <script src="js/soundjs-0.6.1.min.js"></script>
+    <script src="js/assets.js"></script>
+    <script src="js/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/viewport.js"></script>
+    <script type="text/javascript" src="js/ranklist.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/md5-min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/mblLogin.js"></script>
+</body>
+</html>
