@@ -1,67 +1,81 @@
 function init(){
-  var page0;
+  var progressNum,progress;
+  var page0 = new createjs.Container;
   var stage = new createjs.Stage('canvas');
+  stage.addChild(page0);
   var queue = new createjs.LoadQueue();
   queue.installPlugin(createjs.Sound);
-  queue.addEventListener('progress',preload);
   queue.addEventListener('complete',menu);
   queue.loadManifest(manifest);
+
+  start.call(page0,document.getElementById('background'));
+
+  function start(img){
+    this.bg = new createjs.Bitmap(img);
+    this.title = new createjs.Text('Night Run','78px Arial','white');
+    this.title.textAlign = 'center';
+    this.title.textBaseline = 'middle';
+    this.title.x = 1280/2;
+    this.title.y = 750/2;
+    this.num = new createjs.Text('0%','46px Arial','white');
+    this.num.textAlign = 'center';
+    this.num.x = 1280/2;
+    this.num.y = 750/2 + 200;
+    this.addChild(this.bg,this.title,this.num);
+    queue.addEventListener('progress',preload);
+  };
+
+  function preload(event){
+    page0.num.text = Math.floor(event.progress*100) + '%';
+  };
+
+  function menu(){
+    createjs.Sound.play('GameTheme',{loop:-1});
+    page0.num.text = 100 + '%';
+    queue.removeEventListener('progress',preload);
+    page0.removeChild(page0.num);
+    page0.play = new createjs.Container();
+    function playFn(){
+      this.bg = new createjs.Bitmap(queue.getResult('backtable'));
+      this.text = new createjs.Text('PLAY','48px Arial','white');
+      this.text.textAlign = 'center';
+      this.text.textBaseline = 'middle';
+      this.text.x = 439 / 2;
+      this.text.y = 259 / 2;
+      this.x = 1280/2 - 439/2;
+      this.y = 750/2 + 100;
+      this.addChild(this.bg,this.text);
+      this.addEventListener('click',start);
+      createjs.Tween.get(this.text,{loop:true}).to({'alpha':0},1000).to({
+        'alpha':1
+      },100);
+    };
+    playFn.call(page0.play);
+    page0.addChild(page0.play);
+    function start(){
+      page0.removeAllChildren();
+      page0.bg = new createjs.Container();
+      page0.addChild(page0.bg);
+      function bgDw(){
+        var matrix = new createjs.Matrix2D();
+        var translateX = -5;
+        var bgRun = setInterval(function (){
+          matrix.translate(translateX,0);
+        },10);
+        this.black = new createjs.Shape();
+        this.black.graphics.beginBitmapFill(queue.getResult('BGBlack'),'repeat-x',matrix).drawRect(0,0,1280,480);
+        this.white = new createjs.Shape();
+        this.white.graphics.beginBitmapFill(queue.getResult('BGWhite'),'repeat-x',matrix).drawRect(0,0,1280,480);
+        this.white.y = 750/2;
+        this.addChild(this.black,this.white);
+      };
+      bgDw.call(page0.bg);
+    };
+  };
+
 
   createjs.Ticker.setFPS(24);
   createjs.Ticker.addEventListener('tick',function (){
     stage.update();
   });
-
-  function preload(event){
-      page0 = new createjs.Container();
-      var page0bg = new createjs.Bitmap(
-        document.getElementById('background')
-      );
-      var page0text = new createjs.Text('Night Run','85px Arial','#eee');
-      page0text.textAlign = 'center';
-      page0text.x = 1280 / 2;
-      page0text.y = 750 / 2  - 150;
-      var page0progress = new createjs.Container();
-      console.log(event.progress);
-      var page0num = new createjs.Text(Math.floor(event.progress*10) + '0%','45px Arial','#eee');
-      page0num.y = 80/2 - 45/2;
-      page0num.x = 1000/2 - 45/2;
-      var page0proBg = new createjs.Shape();
-      page0proBg.graphics.beginStroke('#eee').drawRect(0,0,1000,80);
-      var page0proColor = new createjs.Shape();
-      page0proColor.graphics.beginFill('gray').drawRect(0,0,Math.floor(event.progress*1000),80);
-      page0progress.addChild(page0proBg,page0proColor,page0num);
-      page0progress.x = 1280/2 - 1000/2;
-      page0progress.y = 750/2 - 80/2 + 150;
-      page0.addChild(page0bg,page0text,page0progress);
-      stage.addChild(page0);
-      createjs.Sound.play('GameTheme',{loop:-1});
-  };
-
-  function menu(){   //载入后游戏准备开始
-    page0.removeAllChildren();
-    stage.clear();
-    queue.removeEventListener('progress',preload);
-    //page0.removeChild(page0progress,page0num,page0proBg,page0proColor)
-    /*var page0table = new createjs.Bitmap(queue.getResult('backtable'));
-    var page0tableTxt = new createjs.Text('PLAY GAME','36px Arial','#EEE');
-    page0tableTxt.textAlign = 'center';
-    createjs.Tween.get(page0.tableTxt,{loop:true}).to({
-      'alpha':0
-    },500).to({
-      'alpha':1
-    },500);
-    page0table.x = 1280/2 - 439/2;
-    page0table.y = 750/2 - 259/2 + 170;
-    page0tableTxt.x = 1280 / 2;
-    page0tableTxt.y = 750 / 2 + 150;
-    page0.addChild(page0table,page0tableTxt);
-    //page0.tableTxt.addEventListener('click',start);*/
-  };
-
-  function start(event){
-    page0.removeAllChildren();
-    console.log(page0);
-    stage.update();
-  };
 };
